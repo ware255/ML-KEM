@@ -1,16 +1,24 @@
 #ifndef _UTILS_HPP_
 #define _UTILS_HPP_
 
+struct Barrett {
+    int MOD;
+    unsigned long long m;
+
+    Barrett(int MOD_) : MOD(MOD_) {
+        m = (1ULL << 32) / MOD;
+    }
+
+    int reduce(int x) const {
+        unsigned long long q = (x * m) >> 32;
+        x -= q * MOD;
+        return x < MOD ? x : x - MOD;
+    }
+};
+
 namespace utils {
     template<typename T>
     T max(T a, T b) { return a >= b ? a : b; }
-
-    template<typename T>
-    T mod(T n, T m) {
-        T rem = n % m;
-        if (rem < 0) return rem + m;
-        return rem;
-    }
 
     template<typename T>
     T abs(T n) {
