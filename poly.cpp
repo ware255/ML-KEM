@@ -108,8 +108,9 @@ void Poly::decompress(Poly& x) {
 void Poly::add(const Poly& a) {
     reserve(N);
     int u;
+    Barrett BR(Q);
     for (int i = 0; i < N; ++i) {
-        u = utils::mod(get(i) + a.get(i), Q);
+        u = BR.reduce(get(i) + a.get(i));
         set(i, u);
     }
 }
@@ -117,8 +118,9 @@ void Poly::add(const Poly& a) {
 void Poly::sub(const Poly& a) {
     reserve(N);
     int u;
+    Barrett BR(Q);
     for (int i = 0; i < N; ++i) {
-        u = utils::mod(get(i) - a.get(i), Q);
+        u = BR.reduce(get(i) - a.get(i));
         set(i, u);
     }
 }
@@ -142,8 +144,9 @@ void Poly::mul(const Poly& a, const Poly& b) {
         }
     }
 
+    Barrett BR(Q);
     for (int i = 0; i < N; ++i)
-        set(i, utils::mod(acc[i], Q));
+        set(i, BR.reduce(acc[i]));
 }
 
 Poly& Poly::operator +=(const Poly& x) {
