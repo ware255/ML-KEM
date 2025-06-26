@@ -6,3 +6,4 @@
 
 ## 参考
 - [ML-KEM](https://github.com/opallace/ML-KEM)
+- [ChaCha20-CSPRNG.c](https://gist.github.com/Emill/d8e8df7269f75b9485a2)
