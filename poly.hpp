@@ -7,6 +7,7 @@ class Poly {
 private:
     void add(const Poly& a);
     void sub(const Poly& a);
+    void karatsuba_mul(const int* a, const int* b, int n, int* out);
     void mul(const Poly& a, const Poly& b);
 public:
     Poly();
@@ -15,6 +16,7 @@ public:
     Poly& operator=(const Poly& x);
     void reserve(int n);
     int get(int i) const;
+    int* get_coeff() const;
     void set(int i, int x);
     int size();
     void gen(int n);
