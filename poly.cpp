@@ -128,13 +128,13 @@ void Poly::sub(const Poly& a) {
 }
 
 void Poly::karatsuba_mul(const int* a, const int* b, int n, int* out) {
+    int i, j;
     if (n <= 64) {
-        for (int i = 0; i < n << 1; ++i) out[i] = 0;
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < n; ++j) {
+        for (i = 0; i < n << 1; ++i) out[i] = 0;
+        for (i = 0; i < n; ++i)
+            for (j = 0; j < n; ++j)
                 out[i + j] += a[i] * b[j];
-            }
-        for (int i = 0; i < n << 1; ++i)
+        for (i = 0; i < n << 1; ++i)
             out[i] = utils::mod(out[i], Q);
         return;
     }
@@ -143,7 +143,7 @@ void Poly::karatsuba_mul(const int* a, const int* b, int n, int* out) {
     int *a_low = new int[m](), *a_high = new int[m]();
     int *b_low = new int[m](), *b_high = new int[m]();
 
-    for (int i = 0; i < m; ++i) {
+    for (i = 0; i < m; ++i) {
         a_low[i] = a[i];
         a_high[i] = a[i + m];
         b_low[i] = b[i];
@@ -160,7 +160,7 @@ void Poly::karatsuba_mul(const int* a, const int* b, int n, int* out) {
 
     // a_sum = a_low + a_high, b_sum = b_low + b_high
     int *a_sum = new int[m](), *b_sum = new int[m]();
-    for (int i = 0; i < m; ++i) {
+    for (i = 0; i < m; ++i) {
         a_sum[i] = a_low[i] + a_high[i];
         b_sum[i] = b_low[i] + b_high[i];
     }
@@ -170,24 +170,26 @@ void Poly::karatsuba_mul(const int* a, const int* b, int n, int* out) {
     karatsuba_mul(a_sum, b_sum, m, z1);
 
     // z1 = z1 - z0 - z2
-    for (int i = 0; i < m << 1; ++i)
+    for (i = 0; i < m << 1; ++i)
         z1[i] = z1[i] - z0[i] - z2[i];
-    for (int i = 0; i < m << 1; ++i)
+    for (i = 0; i < m << 1; ++i)
         z1[i] = utils::mod(z1[i], Q);
 
     // out = z0 + z1 * x^m + z2 * x^{2m}
-    for (int i = 0; i < m << 1; ++i) {
+    for (i = 0; i < m << 1; ++i) {
         out[i]         += z0[i];
         out[i + m]     += z1[i];
         out[i + 2 * m] += z2[i];
     }
-    for (int i = 0; i < m * 3; ++i)
+    for (i = 0; i < m * 3; ++i)
         out[i] = utils::mod(out[i], Q);
 
     delete[] a_low;
     delete[] a_high;
     delete[] b_low;
     delete[] b_high;
+    delete[] a_sum;
+    delete[] b_sum;
     delete[] z0;
     delete[] z1;
     delete[] z2;
